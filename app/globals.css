@@ -2,20 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  @font-face {
+    font-family: 'Chicago';
+    src: url('/fonts/ChicagoFLF.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .retro-bg {
+    @apply bg-[#C0C0C0];
+    background-image: linear-gradient(45deg, #b5b5b5 25%, transparent 25%),
+      linear-gradient(-45deg, #b5b5b5 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #b5b5b5 75%),
+      linear-gradient(-45deg, transparent 75%, #b5b5b5 75%);
+    background-size: 2px 2px;
+    background-position: 0 0, 1px 0, 1px -1px, 0px 1px;
+  }
+
+  .retro-window {
+    @apply shadow-[2px_2px_8px_rgba(0,0,0,0.15)] relative bg-[#C0C0C0] overflow-hidden;
+  }
+
+  .retro-button {
+    @apply h-6 px-3 bg-[#C0C0C0] text-sm font-chicago
+           border-t-[#FFFFFF] border-l-[#FFFFFF] 
+           border-b-[#808080] border-r-[#808080]
+           border-2 select-none
+           hover:bg-[#DFDFDF] 
+           active:bg-[#C0C0C0]
+           active:border-t-[#808080] active:border-l-[#808080]
+           active:border-b-[#FFFFFF] active:border-r-[#FFFFFF]
+           active:translate-y-[1px]
+           disabled:opacity-50 disabled:cursor-not-allowed
+           disabled:hover:bg-[#C0C0C0]
+           disabled:active:translate-y-0
+           disabled:active:border-t-[#FFFFFF]
+           disabled:active:border-l-[#FFFFFF]
+           disabled:active:border-b-[#808080]
+           disabled:active:border-r-[#808080]
+           transition-colors duration-75
+           flex items-center justify-center gap-1.5;
+  }
+
+  .retro-inset {
+    @apply shadow-[inset_2px_2px_4px_rgba(0,0,0,0.15)];
+  }
+  ::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+    background: #c0c0c0;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #c0c0c0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #dfdfdf #808080 #808080 #dfdfdf;
+    box-shadow: inset 1px 1px #ffffff, inset -1px -1px #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  }
+
+  ::-webkit-scrollbar-button:single-button {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #dfdfdf #808080 #808080 #dfdfdf;
+    display: block;
+    height: 16px;
+    width: 16px;
+  }
+
+  /* Up button */
+  ::-webkit-scrollbar-button:single-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='black' d='M4 0l4 4h-8z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center 4px;
+  }
+
+  /* Down button */
+  ::-webkit-scrollbar-button:single-button:vertical:increment {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='black' d='M0 0h8l-4 4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center 4px;
+  }
+
+  /* Left button */
+  ::-webkit-scrollbar-button:single-button:horizontal:decrement {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='black' d='M4 0l4 4-4 4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 4px center;
+  }
+
+  /* Right button */
+  ::-webkit-scrollbar-button:single-button:horizontal:increment {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><path fill='black' d='M0 0l4 4-4 4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 4px center;
+  }
+
+  /* Active states */
+  ::-webkit-scrollbar-button:active,
+  ::-webkit-scrollbar-thumb:active {
+    border-color: #808080 #dfdfdf #dfdfdf #808080;
+  }
 }
