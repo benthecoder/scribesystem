@@ -1,18 +1,27 @@
+export type CorrectionType =
+  | 'clarity'
+  | 'concision'
+  | 'structure'
+  | 'flow'
+  | 'word-choice'
+  | 'tone'
+  | 'technical-accuracy'
+  | 'coherence'
+  | 'spelling'
+  | 'run-on'
+  | 'subject-verb'
+  | 'parallel'
+  | 'completeness'
+  | 'punctuation'
+  | 'articles'
+  | 'tense';
+
 export interface GrammarSuggestion {
   id: string;
   text: string;
   suggestion: string;
   explanation: string;
-  type:
-    | 'spelling'
-    | 'run-on'
-    | 'subject-verb'
-    | 'parallel'
-    | 'completeness'
-    | 'word-choice'
-    | 'punctuation'
-    | 'articles'
-    | 'tense';
+  type: CorrectionType;
 }
 
 export interface CorrectionsSidebarProps {
