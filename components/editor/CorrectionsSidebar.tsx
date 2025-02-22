@@ -4,7 +4,26 @@ import { CorrectionsSidebarProps, GrammarSuggestion } from './types';
 import { useTheme } from './ThemeContext';
 import RetroButton from '../ui/RetroButton';
 import { Check, X } from 'lucide-react';
-import { RetroProgress } from '../ui/LoadingIndicator'; // Add this import
+import { RetroProgress } from '../ui/LoadingIndicator';
+
+const ERROR_TYPE_LABELS = {
+  clarity: 'Clarity',
+  concision: 'Concision',
+  structure: 'Structure',
+  flow: 'Flow',
+  'word-choice': 'Word Choice',
+  tone: 'Tone',
+  'technical-accuracy': 'Technical',
+  coherence: 'Coherence',
+  spelling: 'Spelling',
+  'run-on': 'Run-on Sentence',
+  'subject-verb': 'Subject-Verb',
+  parallel: 'Parallel Structure',
+  completeness: 'Completeness',
+  punctuation: 'Punctuation',
+  articles: 'Articles',
+  tense: 'Tense',
+} as const;
 
 const CorrectionsSidebar = ({
   corrections,
@@ -12,26 +31,27 @@ const CorrectionsSidebar = ({
   text,
   setText,
   onCorrectionHover,
-  isChecking, // Add this
+  isChecking,
 }: CorrectionsSidebarProps) => {
   const { theme, themes } = useTheme();
 
-  const handleApplyCorrection = async (correction: GrammarSuggestion) => {
-    try {
-      const response = await fetch('/api/rewrite', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, correction }),
-      });
-
-      const data = await response.json();
-      if (data.rewrittenText) {
-        setText(data.rewrittenText);
-        setCorrections(corrections.filter((c) => c.id !== correction.id));
-      }
-    } catch (error) {
-      console.error('Failed to apply correction:', error);
+  const handleApplyCorrection = (correction: GrammarSuggestion) => {
+    // Check if the text to be replaced exists in the current content
+    if (!text.includes(correction.text)) {
+      console.log(
+        'Could not find the text to replace. The content might have changed.'
+      );
+      return;
     }
+
+    const newText = text.replace(correction.text, correction.suggestion);
+    setText(newText);
+
+    setCorrections(corrections.filter((c) => c.id !== correction.id));
+  };
+
+  const truncateText = (text: string, maxLength: number = 100) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
   return (
@@ -53,30 +73,28 @@ const CorrectionsSidebar = ({
             No issues found
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {corrections.map((correction) => (
               <div
                 key={correction.id}
-                className={`${themes[theme].window} border-2 ${themes[theme].border} p-2 cursor-pointer`}
+                className={`${themes[theme].window} border-2 ${themes[theme].border} p-3 cursor-pointer hover:bg-opacity-50 transition-colors`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onCorrectionHover(correction.text);
                 }}
               >
-                <div className="flex justify-between items-start mb-2">
+                {/* Error Type Badge */}
+                <div className="flex items-center justify-between mb-2">
                   <span
-                    className={`font-chicago text-sm ${
-                      theme === 'dark' ||
-                      theme === 'synthwave' ||
-                      theme === 'coffee' ||
-                      theme === 'forest'
-                        ? 'text-red-400 line-through'
-                        : 'text-red-800 line-through'
+                    className={`text-xs font-chicago px-2 py-0.5 border ${
+                      theme === 'dark'
+                        ? 'bg-gray-700 text-gray-200 border-gray-600'
+                        : 'bg-gray-200 text-gray-700 border-gray-300'
                     }`}
                   >
-                    {correction.text}
+                    {ERROR_TYPE_LABELS[correction.type]}
                   </span>
-                  <div className="flex gap-1 ml-2 shrink-0">
+                  <div className="flex gap-1">
                     <RetroButton
                       size="sm"
                       onClick={() => handleApplyCorrection(correction)}
@@ -97,27 +115,34 @@ const CorrectionsSidebar = ({
                     </RetroButton>
                   </div>
                 </div>
-                <div
-                  className={`font-chicago text-sm ${
-                    theme === 'dark' ||
-                    theme === 'synthwave' ||
-                    theme === 'coffee' ||
-                    theme === 'forest'
-                      ? 'text-green-400'
-                      : 'text-green-800'
-                  } mb-2`}
-                >
-                  {correction.suggestion}
+
+                {/* Original Text */}
+                <div className="mb-2">
+                  <div
+                    className={`font-chicago text-sm ${
+                      theme === 'classic' ? 'text-red-800' : 'text-red-300'
+                    } line-through break-words`}
+                  >
+                    {truncateText(correction.text)}
+                  </div>
                 </div>
+
+                {/* Suggestion */}
+                <div className="mb-2">
+                  <div
+                    className={`font-chicago text-sm ${
+                      theme === 'classic' ? 'text-green-800' : 'text-green-300'
+                    } break-words`}
+                  >
+                    {correction.suggestion}
+                  </div>
+                </div>
+
+                {/* Explanation */}
                 <div
                   className={`font-chicago text-xs ${
-                    theme === 'dark' ||
-                    theme === 'synthwave' ||
-                    theme === 'coffee' ||
-                    theme === 'forest'
-                      ? 'text-gray-300'
-                      : 'text-[#808080]'
-                  } border-t border-[#808080] pt-1`}
+                    theme === 'dark' ? 'text-gray-300' : 'text-[#808080]'
+                  } border-t border-[#808080] pt-2 mt-2`}
                 >
                   {correction.explanation}
                 </div>

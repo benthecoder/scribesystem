@@ -26,7 +26,7 @@ const TextEditor = () => {
 
     setIsChecking(true);
     try {
-      const response = await fetch('/api/grammar', {
+      const response = await fetch('/api/edit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,6 +91,12 @@ const TextEditor = () => {
       textarea.focus();
       textarea.setSelectionRange(start, start + correctionText.length);
       setSelectedText(correctionText);
+
+      const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+      const numberOfLinesBefore =
+        text.substring(0, start).split('\n').length - 1;
+      const scrollPosition = numberOfLinesBefore * lineHeight;
+      textarea.scrollTop = scrollPosition;
     }
   };
 
@@ -241,7 +247,7 @@ const TextEditor = () => {
           className={`${themes[theme].window} ${themes[theme].text} h-8 border-t-2 ${themes[theme].border} flex items-center justify-between px-2 font-chicago text-sm`}
         >
           <div>
-            Words: {text.trim() ? text.trim().split(/\s+/).length : 0} /
+            words: {text.trim() ? text.trim().split(/\s+/).length : 0} /
             {MAX_WORDS}
           </div>
 
@@ -254,13 +260,14 @@ const TextEditor = () => {
             >
               <HelpCircle className="h-3.5 w-3.5" />
             </RetroButton>
-
             {showHelp && (
-              <div className="absolute bottom-full right-0 mb-1 w-64 bg-white border-2 border-gray-800 shadow-lg rounded-sm z-10 p-3 font-chicago text-sm">
+              <div
+                className={`absolute bottom-full right-0 mb-1 w-64 ${themes[theme].window} border-2 ${themes[theme].border} shadow-lg rounded-sm z-10 p-3 font-chicago text-sm ${themes[theme].text}`}
+              >
                 <h3 className="font-bold mb-2">How to use:</h3>
                 <ul className="space-y-1">
-                  <li>✨ Click the wand to check grammar</li>
-                  <li>⚙️ Set custom rules for checking</li>
+                  <li>✨ Click the wand for feedback</li>
+                  <li>⚙️ Set custom rules for style</li>
                   <li>🎨 Use palette to change themes</li>
                   <li>💾 Save your text as a file</li>
                 </ul>
