@@ -6,6 +6,7 @@ export type Theme = 'classic' | 'dark' | 'synthwave' | 'forest';
 
 export const themes = {
   classic: {
+    background: 'bg-[#E6E6E6]', // Light gray background
     window: 'bg-[#C0C0C0]',
     header: 'bg-[#000080]',
     text: 'text-black',
@@ -16,6 +17,7 @@ export const themes = {
     sidebar: 'bg-[#C0C0C0]',
   },
   synthwave: {
+    background: 'bg-[#120d1d]', // Dark purple background
     window: 'bg-[#1a1a2e]',
     header: 'bg-gradient-to-r from-[#ff2a6d] to-[#7a04eb]',
     text: 'text-[#ff2a6d]',
@@ -26,6 +28,7 @@ export const themes = {
     sidebar: 'bg-[#1a1a2e]',
   },
   forest: {
+    background: 'bg-[#1a2820]', // Dark forest background
     window: 'bg-[#2c4a3c]',
     header: 'bg-[#1a332b]',
     text: 'text-[#c8e6c9]',
@@ -36,6 +39,7 @@ export const themes = {
     sidebar: 'bg-[#2c4a3c]',
   },
   dark: {
+    background: 'bg-[#1A1A1A]', // Dark background
     window: 'bg-[#333333]',
     header: 'bg-[#1A1A1A]',
     text: 'text-white',
