@@ -2,7 +2,7 @@
 
 import { createContext, useContext, ReactNode, useState } from 'react';
 
-export type Theme = 'classic' | 'dark' | 'synthwave' | 'forest' | 'coffee';
+export type Theme = 'classic' | 'dark' | 'synthwave' | 'forest';
 
 export const themes = {
   classic: {
@@ -34,16 +34,6 @@ export const themes = {
     buttonHover: 'hover:bg-[#4a7862]',
     editor: 'bg-[#243c32] text-[#e8f5e9]',
     sidebar: 'bg-[#2c4a3c]',
-  },
-  coffee: {
-    window: 'bg-[#483434]',
-    header: 'bg-[#3c2a21]',
-    text: 'text-[#e5c3a6]',
-    border: 'border-[#6b4f4f] border-r-[#3c2a21] border-b-[#3c2a21]',
-    button: 'bg-[#6b4f4f] text-[#e5c3a6]',
-    buttonHover: 'hover:bg-[#7d5e5e]',
-    editor: 'bg-[#3c2a21] text-[#e5c3a6]',
-    sidebar: 'bg-[#483434]',
   },
   dark: {
     window: 'bg-[#333333]',
